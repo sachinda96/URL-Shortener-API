@@ -1,4 +1,4 @@
-package com.sachinda.urlcreationservice.Entity;
+package com.sachinda.urlcreationservice.entity;
 
 
 import org.springframework.data.annotation.Id;
