@@ -1,16 +1,10 @@
-package com.sachinda.urlcreationservice.Entity;
-
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+package com.sachinda.urlcreationservice.dto;
 
 import java.util.Date;
 
-@Document(collation = "short_url")
-public class ShortURLEntity {
+public class ShortUrlDto {
 
-    @Id
-    private Integer id;
+    private String id;
     private String originalURL;
 
     private String shortURL;
@@ -19,14 +13,13 @@ public class ShortURLEntity {
 
     private Date ExpiresAt;
 
-    private Integer userID;
+        private Integer userID;
 
-
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
