@@ -59,6 +59,7 @@ public class URLServiceImpl implements URLService {
     public String deleteShortUrl(String id) {
 
         shortURLRepository.deleteById(id);
+
         return "200";
     }
 
