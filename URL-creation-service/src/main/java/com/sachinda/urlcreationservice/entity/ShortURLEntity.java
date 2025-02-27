@@ -11,16 +11,17 @@ public class ShortURLEntity {
 
     @Id
     private String id;
-    private String originalURL;
+    private String originalUrl;
 
-    private String shortURL;
+    private String shortUrlKey;
 
     private Date createdAt;
 
-    private Date ExpiresAt;
+    private Date updatedAt;
 
-    private Integer userID;
+    private Date expiresAt;
 
+    private Integer userId;
 
     public String getId() {
         return id;
@@ -30,20 +31,20 @@ public class ShortURLEntity {
         this.id = id;
     }
 
-    public String getOriginalURL() {
-        return originalURL;
+    public String getOriginalUrl() {
+        return originalUrl;
     }
 
-    public void setOriginalURL(String originalURL) {
-        this.originalURL = originalURL;
+    public void setOriginalUrl(String originalUrl) {
+        this.originalUrl = originalUrl;
     }
 
-    public String getShortURL() {
-        return shortURL;
+    public String getShortUrlKey() {
+        return shortUrlKey;
     }
 
-    public void setShortURL(String shortURL) {
-        this.shortURL = shortURL;
+    public void setShortUrlKey(String shortUrlKey) {
+        this.shortUrlKey = shortUrlKey;
     }
 
     public Date getCreatedAt() {
@@ -54,19 +55,27 @@ public class ShortURLEntity {
         this.createdAt = createdAt;
     }
 
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     public Date getExpiresAt() {
-        return ExpiresAt;
+        return expiresAt;
     }
 
     public void setExpiresAt(Date expiresAt) {
-        ExpiresAt = expiresAt;
+        this.expiresAt = expiresAt;
     }
 
-    public Integer getUserID() {
-        return userID;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUserID(Integer userID) {
-        this.userID = userID;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

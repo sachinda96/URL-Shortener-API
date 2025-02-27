@@ -23,24 +23,32 @@ public class URLServiceImpl implements URLService {
     @Override
     public String createURL(ShortUrlDto shortUrlDto) {
 
-        String shortUrl = BASE_URL+generateShortCode(shortUrlDto.getOriginalURL());
+        String shortUrlKey = generateShortCode(shortUrlDto.getOriginalURL());
         ShortURLEntity shorturl= new ShortURLEntity();
         shorturl.setId(UUID.randomUUID().toString());
-        shorturl.setOriginalURL(shortUrlDto.getOriginalURL());
-        shorturl.setShortURL(shortUrl);
-        shorturl.setCreatedAt(new Date());
-        shorturl.setUserID(shortUrlDto.getUserID());
+        shorturl.setOriginalUrl(shortUrlDto.getOriginalURL());
+        shorturl.setShortUrlKey(shortUrlKey);
+
+        Date currentDate = new Date();
+        shorturl.setCreatedAt(currentDate);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        calendar.add(Calendar.MONTH, 1);
+
+        shorturl.setExpiresAt(calendar.getTime());
+
+        shorturl.setUserId(shortUrlDto.getUserID());
 
         shortURLRepository.save(shorturl);
 
-        return shortUrl;
+        return BASE_URL + shortUrlKey;
     }
 
     @Override
     public ShortUrlDto getShortUrl(String id) {
 
         Optional<ShortURLEntity> shortURLEntity = shortURLRepository.findById(id);
-
         return setShortUrlDto(shortURLEntity.get());
     }
 
@@ -65,9 +73,9 @@ public class URLServiceImpl implements URLService {
 
     private ShortUrlDto setShortUrlDto(ShortURLEntity shortURLEntity){
         ShortUrlDto shortUrlDto = new ShortUrlDto();
-        shortUrlDto.setOriginalURL(shortURLEntity.getOriginalURL());
-        shortUrlDto.setShortURL(shortURLEntity.getShortURL());
-        shortUrlDto.setUserID(shortURLEntity.getUserID());
+        shortUrlDto.setOriginalURL(shortURLEntity.getOriginalUrl());
+        shortUrlDto.setShortURL(shortURLEntity.getShortUrlKey());
+        shortUrlDto.setUserID(shortURLEntity.getUserId());
         shortUrlDto.setId(shortURLEntity.getId());
         shortUrlDto.setCreatedAt(shortURLEntity.getCreatedAt());
 
