@@ -1,6 +1,7 @@
 package com.sachinda.urlcreationservice.controller;
 
 import com.sachinda.urlcreationservice.dto.ShortUrlDto;
+import com.sachinda.urlcreationservice.dto.ShortUrlResponseDto;
 import com.sachinda.urlcreationservice.service.URLService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class UrlController {
     private URLService urlService;
 
     @PostMapping
-    public String createURl(@RequestBody ShortUrlDto shortUrlDto){
+    public ShortUrlResponseDto createURl(@RequestBody ShortUrlDto shortUrlDto){
         return urlService.createURL(shortUrlDto);
     }
 

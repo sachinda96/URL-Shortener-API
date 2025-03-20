@@ -9,32 +9,30 @@ import java.util.Date;
 public class ClickEntity {
 
     @Id
-    private Integer id;
+    private String id;
 
-    private Integer  shortURLId;
+    private String  shorturlId;
 
     private String ipAddress;
 
-    private Date ClickedAt;
+    private Date clickedAt;
 
-    private String referrer;
+    private Date createdDate;
 
-    private String userAgent;
-
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Integer getShortURLId() {
-        return shortURLId;
+    public String getShorturlId() {
+        return shorturlId;
     }
 
-    public void setShortURLId(Integer shortURLId) {
-        this.shortURLId = shortURLId;
+    public void setShorturlId(String shorturlId) {
+        this.shorturlId = shorturlId;
     }
 
     public String getIpAddress() {
@@ -46,26 +44,18 @@ public class ClickEntity {
     }
 
     public Date getClickedAt() {
-        return ClickedAt;
+        return clickedAt;
     }
 
     public void setClickedAt(Date clickedAt) {
-        ClickedAt = clickedAt;
+        this.clickedAt = clickedAt;
     }
 
-    public String getReferrer() {
-        return referrer;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setReferrer(String referrer) {
-        this.referrer = referrer;
-    }
-
-    public String getUserAgent() {
-        return userAgent;
-    }
-
-    public void setUserAgent(String userAgent) {
-        this.userAgent = userAgent;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 }

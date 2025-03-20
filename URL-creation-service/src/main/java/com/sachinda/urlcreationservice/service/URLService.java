@@ -1,12 +1,13 @@
 package com.sachinda.urlcreationservice.service;
 
 import com.sachinda.urlcreationservice.dto.ShortUrlDto;
+import com.sachinda.urlcreationservice.dto.ShortUrlResponseDto;
 
 import java.util.List;
 
 public interface URLService {
 
-    public String createURL(ShortUrlDto shortUrlDto);
+    public ShortUrlResponseDto createURL(ShortUrlDto shortUrlDto);
 
     public ShortUrlDto getShortUrl(String id);
 

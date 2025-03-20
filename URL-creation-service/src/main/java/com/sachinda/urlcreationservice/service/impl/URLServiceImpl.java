@@ -1,14 +1,14 @@
 package com.sachinda.urlcreationservice.service.impl;
 
 import com.sachinda.urlcreationservice.dto.ShortUrlDto;
+import com.sachinda.urlcreationservice.dto.ShortUrlResponseDto;
 import com.sachinda.urlcreationservice.entity.ShortURLEntity;
 import com.sachinda.urlcreationservice.repository.ShortURLRepository;
 import com.sachinda.urlcreationservice.service.URLService;
+import com.sachinda.urlcreationservice.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.util.*;
 
 @Service
@@ -16,39 +16,53 @@ public class URLServiceImpl implements URLService {
 
     private final static String BASE_URL = "http://localhost:8080/";
 
+    private static final Random random = new Random();
+
 
     @Autowired
     private ShortURLRepository shortURLRepository;
 
     @Override
-    public String createURL(ShortUrlDto shortUrlDto) {
+    public ShortUrlResponseDto createURL(ShortUrlDto shortUrlDto) {
 
-        String shortUrlKey = generateShortCode(shortUrlDto.getOriginalURL());
-        ShortURLEntity shorturl= new ShortURLEntity();
-        shorturl.setId(UUID.randomUUID().toString());
-        shorturl.setOriginalUrl(shortUrlDto.getOriginalURL());
-        shorturl.setShortUrlKey(shortUrlKey);
+        Optional<ShortURLEntity> shortURLEntity = shortURLRepository.findByOriginalUrl(shortUrlDto.getOriginalURL());
+
+        if(shortURLEntity.isPresent()){
+
+            return new ShortUrlResponseDto(BASE_URL+shortURLEntity.get().getShortUrlKey(), shortURLEntity.get().getExpiresAt());
+        }
+
+        String shortUrlKey = HashUtil.generateMD5(shortUrlDto.getOriginalURL());
+
+        while (shortURLRepository.findByShortUrlKey(shortUrlKey).isPresent()) {
+            shortUrlKey = resolveCollision(shortUrlKey);
+        }
+
+        ShortURLEntity shortUrl= new ShortURLEntity();
+        shortUrl.setId(UUID.randomUUID().toString());
+        shortUrl.setOriginalUrl(shortUrlDto.getOriginalURL());
+        shortUrl.setShortUrlKey(shortUrlKey);
 
         Date currentDate = new Date();
-        shorturl.setCreatedAt(currentDate);
+        shortUrl.setCreatedAt(currentDate);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
         calendar.add(Calendar.MONTH, 1);
 
-        shorturl.setExpiresAt(calendar.getTime());
+        shortUrl.setExpiresAt(calendar.getTime());
 
-        shorturl.setUserId(shortUrlDto.getUserID());
+        shortUrl.setUserId(shortUrlDto.getUserID());
 
-        shortURLRepository.save(shorturl);
+        shortURLRepository.save(shortUrl);
 
-        return BASE_URL + shortUrlKey;
+        return new ShortUrlResponseDto(BASE_URL + shortUrlKey, shortUrl.getExpiresAt());
     }
 
     @Override
-    public ShortUrlDto getShortUrl(String id) {
+    public ShortUrlDto getShortUrl(String key) {
 
-        Optional<ShortURLEntity> shortURLEntity = shortURLRepository.findById(id);
+        Optional<ShortURLEntity> shortURLEntity = shortURLRepository.findById(key);
         return setShortUrlDto(shortURLEntity.get());
     }
 
@@ -82,13 +96,8 @@ public class URLServiceImpl implements URLService {
         return shortUrlDto;
     }
 
-    private String generateShortCode(String input) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
-            return Base64.getUrlEncoder().withoutPadding().encodeToString(hash).substring(0, 6);
-        } catch (Exception e) {
-            throw new RuntimeException("Error generating hash", e);
-        }
+
+    private String resolveCollision(String shortUrl) {
+        return shortUrl + random.nextInt(10); // Append a digit to reduce collision
     }
 }
