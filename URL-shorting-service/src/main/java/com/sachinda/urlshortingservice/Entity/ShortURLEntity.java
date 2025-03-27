@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
-@Document(collation = "short_url")
+@Document()
 public class ShortURLEntity {
 
     @Id

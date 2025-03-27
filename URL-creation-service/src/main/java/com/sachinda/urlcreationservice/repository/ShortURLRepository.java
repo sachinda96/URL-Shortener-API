@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ShortURLRepository extends MongoRepository<ShortURLEntity, String> {
-    List<ShortURLEntity> findAllByUserID(String userId);
+    List<ShortURLEntity> findAllByUserId(String userId);
 
     Optional<ShortURLEntity> findByOriginalUrl(String originalURL);
 
