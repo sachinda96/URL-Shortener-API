@@ -1,7 +1,7 @@
-package com.sachinda.urlcreationservice.exception;
+package com.sachinda.urlshortingservice.exception;
 
-import com.sachinda.urlcreationservice.dto.ApiErrorResponse;
-import com.sachinda.urlcreationservice.exception.custom.*;
+import com.sachinda.urlshortingservice.dto.ApiErrorResponse;
+import com.sachinda.urlshortingservice.exception.custom.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

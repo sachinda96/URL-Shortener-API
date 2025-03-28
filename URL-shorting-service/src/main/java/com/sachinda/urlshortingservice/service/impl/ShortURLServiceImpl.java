@@ -2,6 +2,8 @@ package com.sachinda.urlshortingservice.service.impl;
 
 import com.sachinda.urlshortingservice.Entity.ClickEntity;
 import com.sachinda.urlshortingservice.Entity.ShortURLEntity;
+import com.sachinda.urlshortingservice.exception.custom.DatabaseException;
+import com.sachinda.urlshortingservice.exception.custom.ResourceNotFoundException;
 import com.sachinda.urlshortingservice.repository.ClickRepository;
 import com.sachinda.urlshortingservice.repository.ShortURLRepository;
 import com.sachinda.urlshortingservice.service.ShortURLService;
@@ -28,11 +30,9 @@ public class ShortURLServiceImpl implements ShortURLService {
     @Override
     public String getOriginalURL(String shortUrlKey, String ipAddress) {
 
-        try {
-
             if(shortUrlKey == null){
                 logger.error("Short key cannot be null");
-                return null;
+                throw new ResourceNotFoundException("Short url key is invalid");
             }
 
             logger.info("Fetching the original url with short key: {}",shortUrlKey);
@@ -40,22 +40,24 @@ public class ShortURLServiceImpl implements ShortURLService {
 
             if(shortURLEntity == null){
                 logger.error("Fetching failed, the short key is invalid");
-                return null;
+                throw new ResourceNotFoundException("Short url not found for key "+ shortUrlKey);
             }
 
-            ClickEntity clickEntity = new ClickEntity();
-            clickEntity.setId(UUID.randomUUID().toString());
-            clickEntity.setCreatedDate(new Date());
-            clickEntity.setIpAddress(ipAddress);
-            clickEntity.setClickedAt(new Date());
-            clickEntity.setShorturlId(shortURLEntity.getId());
+            try {
+                ClickEntity clickEntity = new ClickEntity();
+                clickEntity.setId(UUID.randomUUID().toString());
+                clickEntity.setCreatedDate(new Date());
+                clickEntity.setIpAddress(ipAddress);
+                clickEntity.setClickedAt(new Date());
+                clickEntity.setShorturlId(shortURLEntity.getId());
 
-            clickRepository.save(clickEntity);
+                clickRepository.save(clickEntity);
+            }catch (Exception e){
+                throw new DatabaseException("Failed to save the click data to the database", e);
+            }
+
             logger.debug("Successfully retrieved original url with Short key: {}", shortUrlKey);
             return shortURLEntity.getOriginalUrl();
-        }catch (Exception e){
-            logger.error("Failed to fetch the original URL");
-            return null;
-        }
+
     }
 }

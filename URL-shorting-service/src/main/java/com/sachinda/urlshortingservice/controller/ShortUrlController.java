@@ -28,10 +28,6 @@ public class ShortUrlController {
         logger.info("Received request to fetch the original URL with short key : {}",shortKey);
         String ipAddress = request.getRemoteAddr();
         String originalUrl = shortURLService.getOriginalURL(shortKey,ipAddress);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create(originalUrl));
-        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
-        //return ResponseEntity.status(302).location(URI.create(originalUrl)).build();
+        return ResponseEntity.status(302).location(URI.create(originalUrl)).build();
     }
 }

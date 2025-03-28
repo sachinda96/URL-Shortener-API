@@ -6,6 +6,8 @@ import com.sachinda.urlcreationservice.service.URLService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,27 +23,27 @@ public class UrlController {
 
 
     @PostMapping
-    public ShortUrlResponseDto createURl(@RequestBody ShortUrlDto shortUrlDto){
+    public ResponseEntity<ShortUrlResponseDto> createURl(@RequestBody ShortUrlDto shortUrlDto){
         logger.info("Received request to create short URL for: {}", shortUrlDto.getOriginalURL());
-        return urlService.createURL(shortUrlDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(urlService.createURL(shortUrlDto));
     }
 
     @GetMapping("/{id}")
-    public ShortUrlDto createURl(@PathVariable String id){
+    public ResponseEntity<ShortUrlDto> createURl(@PathVariable String id){
         logger.info("Received request to fetch short URL for ID: {}", id);
-        return urlService.getShortUrl(id);
+        return ResponseEntity.status(HttpStatus.OK).body(urlService.getShortUrl(id));
     }
 
     @GetMapping("getAllByUser/{userId}")
-    public List<ShortUrlDto> getByUser(@PathVariable String userId){
+    public ResponseEntity<List<ShortUrlDto>> getByUser(@PathVariable String userId){
         logger.info("Received request to fetch all short URLs for user ID: {}", userId);
-        return urlService.getAllShortUrls(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(urlService.getAllShortUrls(userId));
     }
 
     @DeleteMapping("/{id}")
-    public String deleteURl(@PathVariable String id){
+    public ResponseEntity<String> deleteURl(@PathVariable String id){
         logger.info("Received request to delete short URL with ID: {}", id);
-        return urlService.deleteShortUrl(id);
+        return ResponseEntity.status(HttpStatus.OK).body(urlService.deleteShortUrl(id));
     }
 
 }
